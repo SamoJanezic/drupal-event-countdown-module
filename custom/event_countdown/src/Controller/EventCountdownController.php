@@ -6,43 +6,57 @@ use Drupal\Core\Controller\ControllerBase;
 
 class EventCountdownController extends ControllerBase {
 
+    //premik ure konec MARCA in konec OKTOBRA
     // public $currentDate = date("Y-m-d");
-    public $expDate;
+    public $startDate;
+    public $startTime;
+    public $daysLeft;
+    public $currentTime;
 
-    public $myDate;
 
-    public function getExpDate() {
+    public function getStartDate() {
         $node = \Drupal::routeMatch()->getParameter('node');
         $value = $node->field_date[0]->value;
-        $this->expDate = $value;
+
+
+        $dateSplit = explode('T', $value);
+        $this->startDate = $dateSplit[0];
+        $this->startTime = $dateSplit[1];
+
+        // var_dump($this->startTime);
+
     }
 
 
-    public function calculate() {
-        $date1=date_create("2024-02-27");
-        $date2=date_create("2024-03-02");
-        $diff=date_diff($date1,$date2);
-        return $diff->format("%R%a days");
+    // public function getTimeOffset() {
+    //     return date('P');
+    // }
+
+    public function getDaysLeft() {
+        $currentDate = date("Y/m/d");
+        $this->currentTime = date("H");
+        // var_dump($this->startTime, $this->startDate);
+        $remaining = strtotime($this->startDate) - strtotime($currentDate);
+        $this->daysLeft = ceil((($remaining/24)/60)/60);
     }
 
-    public function getEndTime() {
-        $now = time();
-        $node = \Drupal::routeMatch()->getParameter('node');
-        $value = $node->field_date[0]->value;
-        $hour = explode('T', $value);
-        $days = strtotime($hour[0]);
-        $datediff = $days - $now;
-        $daysLeft = ceil($datediff / (60 * 60 * 24));
 
-        if ($daysLeft < 0) {
+    public function setMessage() {
+        $this->getDaysLeft();
+        if ($this->daysLeft < 0) {
             return "This event already passed";
         }
 
-        if ($daysLeft == 0) {
+        if ($this->daysLeft == 0) {
             return "This event is happening today";
         }
 
-        return "{$daysLeft} days left until event starts";
+        if ($this->daysLeft == 1) {
+            return "{$this->daysLeft} day left until event starts";
+        }
+
+        return "{$this->daysLeft} days left until event starts";
+        // return $this->currentTime;
     }
 
 

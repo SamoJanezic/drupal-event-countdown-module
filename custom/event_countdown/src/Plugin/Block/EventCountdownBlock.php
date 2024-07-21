@@ -25,24 +25,11 @@ use Drupal\event_countdown\Controller\EventCountdownController;
     public function build() {
         \Drupal::cache()->invalidateAll();
         $ECC = new EventCountdownController;
-        $ECC->getExpDate();
-        $ECC->getErr($ECC->expDate);
-        // $ECC->getErr($ECC->calculate());
-        // $nid = \Drupal::routeMatch()->getRawParameter('node');
-        // $nid = 'Node Id';
-        // $node = Node::load($nid);
-        // $ECC->getErr($node->title);
-        // $t = $node->get('title');
-        // $title = $date_field->value;
-        // $node = \Drupal::routeMatch()->getParameter('node');
-        // $value = $node->field_date[0]->value;
-        // $nid = $node->title();
-        // $ECC->getErr($value);
-
+        $ECC->getStartDate();
 
         return [
             '#type' => 'markup',
-            '#markup' => $ECC->getEndTime(),
+            '#markup' => $ECC->setMessage(),
             '#cache' => [
                 'max-age' => 0,
             ]
