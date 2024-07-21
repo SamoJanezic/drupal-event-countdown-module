@@ -23,7 +23,6 @@ use Drupal\event_countdown\Controller\EventCountdownController;
 
     public function build() {
         $ECC = new EventCountdownController;
-        $ECC->getStartDate();
 
         return [
             '#type' => 'markup',

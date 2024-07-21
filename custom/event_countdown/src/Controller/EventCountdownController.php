@@ -7,7 +7,6 @@ use Drupal\Core\Datetime\DrupalDateTime;
 
 class EventCountdownController extends ControllerBase {
 
-    //premik ure konec MARCA in konec OKTOBRA
     public $startDate;
     public $startTime;
     public $daysLeft;
@@ -20,10 +19,7 @@ class EventCountdownController extends ControllerBase {
         $date_value = $node->field_date->value;
         $date_time = new DrupalDateTime($date_value, new \DateTimeZone('UTC'));
         $timestamp = $date_time->getTimestamp();
-
         $date = date("Y-m-d_H:i:s", $timestamp);
-        var_dump($date);
-
         $dateSplit = explode('_', $date);
         $this->startDate = $dateSplit[0];
         $this->startTime = $dateSplit[1];
@@ -37,6 +33,7 @@ class EventCountdownController extends ControllerBase {
     }
 
     public function setMessage() {
+        $this->getStartDate();
         $this->getDaysLeft();
 
         if ($this->daysLeft < 0) {
