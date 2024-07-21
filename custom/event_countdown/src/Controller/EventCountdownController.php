@@ -6,14 +6,12 @@ use Drupal\Core\Controller\ControllerBase;
 
 class EventCountdownController extends ControllerBase {
 
-    //premik ure konec MARCA in konec OKTOBRA
-    public $startDate;
-    public $startTime;
+    public $eventStartDate;
+    public $eventStartTime;
     public $daysLeft;
-    public $currentTime;
 
 
-    public function getStartDate() {
+    public function geteventStartDate() {
         $node = \Drupal::routeMatch()->getParameter('node');
         $value = $node->field_date[0]->value;
         $timestamp = strtotime($value);
@@ -22,20 +20,18 @@ class EventCountdownController extends ControllerBase {
         } else {
             $timestamp += 3600;
         }
-
         $date = date("Y-m-d_H:i:s", $timestamp);
 
         $dateSplit = explode('_', $date);
-        $this->startDate = $dateSplit[0];
-        $this->startTime = $dateSplit[1];
-
+        $this->eventStartDate = $dateSplit[0];
+        $this->eventStartTime = $dateSplit[1];
     }
 
     public function getDaysLeft() {
         $currentDate = date("Y/m/d");
-        $this->currentTime = date("H");
-        $remaining = strtotime($this->startDate) - strtotime($currentDate);
-        $this->daysLeft = floor((($remaining/24)/60)/60);
+        $currentTime = date("H");
+        $remainingDays = strtotime($this->eventStartDate) - strtotime($currentDate);
+        $this->daysLeft = floor((($remainingDays/24)/60)/60);
     }
 
     public function setMessage() {
