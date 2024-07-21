@@ -23,10 +23,11 @@ use Drupal\event_countdown\Controller\EventCountdownController;
 
     public function build() {
         $ECC = new EventCountdownController;
+        $countDownMessage = $ECC->setMessage();
 
         return [
             '#type' => 'markup',
-            '#markup' => $ECC->setMessage(),
+            '#markup' => $countDownMessage,
             '#cache' => [
                 'max-age' => 0,
             ]

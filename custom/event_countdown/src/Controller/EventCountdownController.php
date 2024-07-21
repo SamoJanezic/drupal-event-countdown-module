@@ -5,49 +5,32 @@ namespace Drupal\event_countdown\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DrupalDateTime;
 
+
 class EventCountdownController extends ControllerBase {
 
-    public $startDate;
-    public $startTime;
-    public $daysLeft;
-
-
     public function getStartDate() {
-        /** @var Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
-        $date_formatter = \Drupal::service('date.formatter');
         $node = \Drupal::routeMatch()->getParameter('node');
         $date_value = $node->field_date->value;
-        $date_time = new DrupalDateTime($date_value, new \DateTimeZone('UTC'));
-        $timestamp = $date_time->getTimestamp();
-        $date = date("Y-m-d_H:i:s", $timestamp);
-        $dateSplit = explode('_', $date);
-        $this->startDate = $dateSplit[0];
-        $this->startTime = $dateSplit[1];
+        return $date_value;
     }
 
-    public function getDaysLeft() {
-        $currentDate = date("Y/m/d");
-        $currentTime = date("H");
-        $remainingDays = strtotime($this->startDate) - strtotime($currentDate);
-        $this->daysLeft = floor((($remainingDays/24)/60)/60);
-    }
 
     public function setMessage() {
-        $this->getStartDate();
-        $this->getDaysLeft();
+        $countdownService = \Drupal::service('eventCountdownTime');
+        $daysLeft = $countdownService->getDaysLeft($this->getStartDate());
 
-        if ($this->daysLeft < 0) {
+        if ($daysLeft < 0) {
             return "This event already passed";
         }
 
-        if ($this->daysLeft == 0) {
+        if ($daysLeft == 0) {
             return "This event is happening today";
         }
 
-        if ($this->daysLeft == 1) {
-            return "{$this->daysLeft} day left until event starts";
+        if ($daysLeft == 1) {
+            return "{$daysLeft} day left until event starts";
         }
 
-        return "{$this->daysLeft} days left until event starts";
+        return "{$daysLeft} days left until event starts";
     }
 }
