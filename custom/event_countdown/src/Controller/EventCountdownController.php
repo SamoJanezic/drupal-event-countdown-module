@@ -3,34 +3,36 @@
 namespace Drupal\event_countdown\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Datetime\DrupalDateTime;
 
 class EventCountdownController extends ControllerBase {
 
-    public $eventStartDate;
-    public $eventStartTime;
+    //premik ure konec MARCA in konec OKTOBRA
+    public $startDate;
+    public $startTime;
     public $daysLeft;
 
 
-    public function geteventStartDate() {
+    public function getStartDate() {
+        /** @var Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
+        $date_formatter = \Drupal::service('date.formatter');
         $node = \Drupal::routeMatch()->getParameter('node');
-        $value = $node->field_date[0]->value;
-        $timestamp = strtotime($value);
-        if(date('I', $timestamp)) {
-            $timestamp += 7200;
-        } else {
-            $timestamp += 3600;
-        }
+        $date_value = $node->field_date->value;
+        $date_time = new DrupalDateTime($date_value, new \DateTimeZone('UTC'));
+        $timestamp = $date_time->getTimestamp();
+
         $date = date("Y-m-d_H:i:s", $timestamp);
+        var_dump($date);
 
         $dateSplit = explode('_', $date);
-        $this->eventStartDate = $dateSplit[0];
-        $this->eventStartTime = $dateSplit[1];
+        $this->startDate = $dateSplit[0];
+        $this->startTime = $dateSplit[1];
     }
 
     public function getDaysLeft() {
         $currentDate = date("Y/m/d");
         $currentTime = date("H");
-        $remainingDays = strtotime($this->eventStartDate) - strtotime($currentDate);
+        $remainingDays = strtotime($this->startDate) - strtotime($currentDate);
         $this->daysLeft = floor((($remainingDays/24)/60)/60);
     }
 
