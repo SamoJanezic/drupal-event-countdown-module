@@ -3,7 +3,6 @@
 namespace Drupal\event_countdown\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\node\Entity\Node;
 use Drupal\event_countdown\Controller\EventCountdownController;
 
 /**
@@ -23,7 +22,6 @@ use Drupal\event_countdown\Controller\EventCountdownController;
 
 
     public function build() {
-        \Drupal::cache()->invalidateAll();
         $ECC = new EventCountdownController;
         $ECC->getStartDate();
 
