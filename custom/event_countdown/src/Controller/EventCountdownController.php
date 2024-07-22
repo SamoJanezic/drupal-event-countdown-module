@@ -17,12 +17,15 @@ class EventCountdownController extends ControllerBase {
     public function getMessage() {
         $countdownService = \Drupal::service('eventCountdownTime');
         $daysLeft = $countdownService->getDaysLeft($this->getEventStartDate());
-
+        $hoursLeft = $countdownService->getHoursLeft($this->getEventStartDate());
         if ($daysLeft < 0) {
             return "This event already passed";
         }
 
         if ($daysLeft == 0) {
+            if ($hoursLeft > 0) {
+                return "{$hoursLeft} hours left until event starts";
+            }
             return "This event is happening today";
         }
 
