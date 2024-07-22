@@ -3,21 +3,20 @@
 namespace Drupal\event_countdown\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Datetime\DrupalDateTime;
 
 
 class EventCountdownController extends ControllerBase {
 
-    public function getStartDate() {
+    public function getEventStartDate() {
         $node = \Drupal::routeMatch()->getParameter('node');
         $date_value = $node->field_date->value;
         return $date_value;
     }
 
 
-    public function setMessage() {
+    public function getMessage() {
         $countdownService = \Drupal::service('eventCountdownTime');
-        $daysLeft = $countdownService->getDaysLeft($this->getStartDate());
+        $daysLeft = $countdownService->getDaysLeft($this->getEventStartDate());
 
         if ($daysLeft < 0) {
             return "This event already passed";

@@ -23,7 +23,7 @@ use Drupal\event_countdown\Controller\EventCountdownController;
 
     public function build() {
         $ECC = new EventCountdownController;
-        $countDownMessage = $ECC->setMessage();
+        $countDownMessage = $ECC->getMessage();
 
         return [
             '#type' => 'markup',
