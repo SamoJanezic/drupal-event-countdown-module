@@ -11,13 +11,11 @@ class EventCountdownTime {
         return $date_time->getTimestamp();
     }
     public function getDaysLeft($eventStartDate) {
-        // $date_time = new DrupalDateTime($eventStartDate, new \DateTimeZone('UTC'));
-        // $timestamp = $date_time->getTimestamp();
         $timestamp = $this->getDrupalDate($eventStartDate);
-        $startDate = date("Y-m-d", $timestamp);
-        $currentDate = date("Y-m-d");
-        $remainingDays = strtotime($startDate) - strtotime($currentDate);
-        return floor((($remainingDays/24)/60)/60);
+        $startDate = new \DateTime(date("Y-m-d", $timestamp));
+        $currentDate = new \DateTime(date("Y-m-d"));
+        $remainingDays = date_diff($currentDate, $startDate);
+        return $remainingDays->format("%r%a");
     }
 
     public function getHoursLeft($eventStartDate) {
